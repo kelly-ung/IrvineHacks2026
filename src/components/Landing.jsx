@@ -1,4 +1,3 @@
-import SearchBar from "./SearchBar";
 import PlantImage from "../assets/green_plant.jpg";
 
 function Landing() {
@@ -24,10 +23,6 @@ function Landing() {
                     Access data for 300+ species.<br />  
                     Filter by light, water, and difficulty.
                     </p>
-
-                    <div className="mt-6">
-                    <SearchBar />
-                    </div>
                 </div>
             </div>
         </div>
