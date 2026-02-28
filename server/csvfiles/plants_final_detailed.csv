@@ -1,4 +1,4 @@
-plantName,growth,soil,sunlight,watering,fertilizationType,difficultyOfCare,classification,url
+plantName,growth,soil,sunlight,watering,fertilizationType,difficultyOfCare,classification,
 Aloe Vera,slow,sandy,indirect sunlight,Water weekly,Balanced,3,"medicinal, skincare, succulent",
 Basil,fast,well-drained,full sunlight,Keep soil evenly moist,Organic,10,"herb, edible",
 Snake Plant,slow,well-drained,indirect sunlight,Water when soil is dry,No,1,toxic,

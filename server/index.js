@@ -24,8 +24,16 @@ db.serialize(() => {
         watering TEXT,
         fertilizationType TEXT,
         difficultyOfCare INTEGER,
-        classification TEXT,
-        url TEXT
+        classification TEXT
+      )
+    `);
+
+  db.run(`
+    CREATE TABLE IF NOT EXISTS plant_images (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      plantName TEXT,
+      imageUrl TEXT,
+      FOREIGN KEY (plantName) REFERENCES plants(plantName) ON DELETE CASCADE
     )
   `);
 });
@@ -37,84 +45,77 @@ app.get("/", (req, res) => {
 
 // search query for plant name case insensitive
 app.get("/search", (req, res) => {
-  const { name, sunlight, difficulty, soil, classification } = req.query;
+  const { name, classification } = req.query;
 
-  // Start with a base query
-  let query = "SELECT * FROM plants WHERE 1=1";
+  let query = `
+    SELECT p.*, i.imageUrl
+    FROM plants p
+    LEFT JOIN plant_images i ON p.plantName = i.plantName
+    WHERE 1=1
+  `;
   const params = [];
 
-  // Add filters dynamically
   if (name) {
-    query += " AND LOWER(plantName) LIKE LOWER(?)";
+    query += " AND LOWER(p.plantName) LIKE LOWER(?)";
     params.push(`%${name}%`);
   }
 
-  if (sunlight) {
-    query += " AND LOWER(sunlight) = LOWER(?)";
-    params.push(sunlight);
-  }
-
-  if (difficulty) {
-    query += " AND difficultyOfCare = ?";
-    params.push(difficulty);
-  }
-
-  if (soil) {
-    query += " AND LOWER(soil) = LOWER(?)";
-    params.push(soil);
-  }
-
   if (classification) {
-    query += " AND LOWER(classification) LIKE LOWER(?)";
+    query += " AND LOWER(p.classification) LIKE LOWER(?)";
     params.push(`%${classification}%`);
   }
 
   db.all(query, params, (err, rows) => {
     if (err) return res.status(500).json(err);
-    res.json(rows);
+
+    // Aggregate images into an array per plant
+    const plantsMap = {};
+    rows.forEach(row => {
+      if (!plantsMap[row.plantName]) {
+        plantsMap[row.plantName] = {
+          plantName: row.plantName,
+          growth: row.growth,
+          soil: row.soil,
+          sunlight: row.sunlight,
+          watering: row.watering,
+          fertilizationType: row.fertilizationType,
+          difficultyOfCare: row.difficultyOfCare,
+          classification: JSON.parse(row.classification),
+          images: [],
+        };
+      }
+      if (row.imageUrl) plantsMap[row.plantName].images.push(row.imageUrl);
+    });
+
+    res.json(Object.values(plantsMap));
   });
 });
 
+// filters
+app.get("/filters", (req, res) => {
+  db.all("SELECT classification, difficultyOfCare, growth FROM plants", [], (err, rows) => {
+    if (err) return res.status(500).json(err);
 
+    const classificationsSet = new Set();
+    const difficultySet = new Set();
+    const growthSet = new Set();
 
-app.post("/plants", (req, res) => {
-  const {
-    plantName,
-    growth,
-    soil, 
-    sunlight,
-    watering,
-    fertilizationType,
-    difficultyOfCare,
-    classification,
-    url
-  } = req.body;
-
-  const sql = `
-    INSERT INTO plants
-    (plantName, growth, soil, sunlight, watering, fertilizationType, difficultyOfCare, classification, url)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `;
-  db.run(
-    sql,
-    [
-      plantName,
-      growth,
-      soil,
-      sunlight,
-      watering,
-      fertilizationType,
-      difficultyOfCare,
-      JSON.stringify(classification),
-      JSON.stringify(url)
-    ],
-    function (err) {
-      if (err) {
-        return res.status(500).json({ error: err.message });
+    rows.forEach(row => {
+      // Split comma-separated classification
+      if (row.classification) {
+        row.classification.split(",").map(c => c.trim()).forEach(c => classificationsSet.add(c));
       }
-      res.json({ id: this.lastID });
-    }
-  );
+
+      if (row.difficultyOfCare) difficultySet.add(row.difficultyOfCare);
+      if (row.growth) growthSet.add(row.growth.trim());
+    });
+
+    res.json({
+      classifications: Array.from(classificationsSet).sort(),
+      difficulty: Array.from(difficultySet).sort(),
+      growth: Array.from(growthSet).sort(),
+    });
+  });
 });
 
 
