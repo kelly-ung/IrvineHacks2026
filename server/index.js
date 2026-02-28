@@ -35,23 +35,46 @@ app.get("/", (req, res) => {
   res.send("API is running 🚀");
 });
 
-
+// search query for plant name case insensitive
 app.get("/search", (req, res) => {
-  const { name } = req.query;
+  const { name, sunlight, difficulty, soil, classification } = req.query;
 
-  if (!name) {
-    return res.status(400).json({ error: "Name query is required" });
+  // Start with a base query
+  let query = "SELECT * FROM plants WHERE 1=1";
+  const params = [];
+
+  // Add filters dynamically
+  if (name) {
+    query += " AND LOWER(plantName) LIKE LOWER(?)";
+    params.push(`%${name}%`);
   }
 
-  db.all(
-    "SELECT * FROM plants WHERE plantName LIKE ?",
-    [`%${name}%`],
-    (err, rows) => {
-      if (err) return res.status(500).json(err);
-      res.json(rows);
-    }
-  );
+  if (sunlight) {
+    query += " AND LOWER(sunlight) = LOWER(?)";
+    params.push(sunlight);
+  }
+
+  if (difficulty) {
+    query += " AND difficultyOfCare = ?";
+    params.push(difficulty);
+  }
+
+  if (soil) {
+    query += " AND LOWER(soil) = LOWER(?)";
+    params.push(soil);
+  }
+
+  if (classification) {
+    query += " AND LOWER(classification) LIKE LOWER(?)";
+    params.push(`%${classification}%`);
+  }
+
+  db.all(query, params, (err, rows) => {
+    if (err) return res.status(500).json(err);
+    res.json(rows);
+  });
 });
+
 
 
 app.post("/plants", (req, res) => {
