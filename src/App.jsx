@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 import Landing from "./components/Landing";
 import SearchBar from "./components/SearchBar";
@@ -10,6 +10,9 @@ function App() {
   const [plants, setPlants] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedPlant, setSelectedPlant] = useState(null);
+  const [resetFilters, setResetFilters] = useState(false);
+  const [value, setValue] = useState("");
+  const searchRef = useRef(null);
 
   useEffect(() => {
     const fetchPlants = async () => {
@@ -28,6 +31,7 @@ function App() {
           fertilizationType: plant.fertilizationType,
           difficultyOfCare: plant.difficultyOfCare,
           classification: plant.classification,
+          description: plant.description || "",
           images: plant.images,
         }));
 
@@ -42,28 +46,34 @@ function App() {
     fetchPlants();
   }, []);
 
+  const scrollToSearch = () => {
+    searchRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   const handleFiltersChange = (filters) => {
-  const query = new URLSearchParams();
+    const query = new URLSearchParams();
+    setValue("");
 
-  // Growth filters
-  filters.growth.forEach(g => query.append("growth", g));
+    // Growth filters
+    filters.growth.forEach(g => query.append("growth", g));
 
-  // Sunlight filters
-  filters.sunlight.forEach(s => query.append("sunlight", s));
+    // Sunlight filters
+    filters.sunlight.forEach(s => query.append("sunlight", s));
 
-  // Difficulty range
-  query.append("difficultyMin", filters.difficultyOfCare.min);
-  query.append("difficultyMax", filters.difficultyOfCare.max);
+    // Difficulty range
+    query.append("difficultyMin", filters.difficultyOfCare.min);
+    query.append("difficultyMax", filters.difficultyOfCare.max);
 
-  fetch(`http://localhost:4000/plants?${query.toString()}`)
-    .then(res => res.json())
-    .then(data => setPlants(data))
-    .catch(console.error);
-};
+    fetch(`http://localhost:4000/plants?${query.toString()}`)
+      .then(res => res.json())
+      .then(data => setPlants(data))
+      .catch(console.error);
+  };
 
   const handleSearch = async (searchTerm) => {
     try {
       setLoading(true);
+      setResetFilters(true);  
 
       const res = await fetch(
         `http://localhost:4000/search?name=${encodeURIComponent(searchTerm)}`
@@ -90,6 +100,7 @@ function App() {
       console.error("Search error:", err);
     } finally {
       setLoading(false);
+      setResetFilters(false);  
     }
   };
   
@@ -99,11 +110,11 @@ return (
         Xylem
       </h1>
 
-      <Landing />
+      <Landing onTryNow={scrollToSearch} />
 
-      <div className="mt-64 flex justify-center">
-        <div className="mx-8 w-full max-w-xl">
-          <SearchBar onSearch={handleSearch} />
+      <div ref={searchRef} className="mt-64 flex justify-center">
+        <div className="mx-8 mt-12 w-full max-w-xl">
+          <SearchBar onSearch={handleSearch} value={value} setValue={setValue} />
         </div>
       </div>
 
@@ -111,7 +122,7 @@ return (
         {/* Sticky Filter */}
         <div className="lg:w-1/4">
           <div className="sticky top-8">
-            <FilterForm onChange={handleFiltersChange} />
+            <FilterForm onChange={handleFiltersChange} resetFilters={resetFilters}/>
           </div>
         </div>
 
