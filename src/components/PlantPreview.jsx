@@ -9,7 +9,7 @@ function PlantPreview({ plant, onButtonClick }) {
 
         {/* Plant Info */}
         <div className="mt-4">
-            <h2 className="font-bold text-2xl mb-2">{plant.name}</h2>
+            <h2 className="font-bold text-2xl mb-2">{plant.plantName}</h2>
         </div>
 
         {/* Button */}

@@ -93,31 +93,83 @@ app.get("/search", (req, res) => {
 
 // filters
 app.get("/filters", (req, res) => {
-  db.all("SELECT classification, difficultyOfCare, growth FROM plants", [], (err, rows) => {
+  db.all("SELECT sunlight, difficultyOfCare, growth FROM plants", [], (err, rows) => {
     if (err) return res.status(500).json(err);
 
-    const classificationsSet = new Set();
+    const sunlightSet = new Set();
     const difficultySet = new Set();
     const growthSet = new Set();
 
     rows.forEach(row => {
-      // Split comma-separated classification
-      if (row.classification) {
-        row.classification.split(",").map(c => c.trim()).forEach(c => classificationsSet.add(c));
-      }
-
+      if (row.sunlight) sunlightSet.add(row.sunlight.trim());
       if (row.difficultyOfCare) difficultySet.add(row.difficultyOfCare);
       if (row.growth) growthSet.add(row.growth.trim());
     });
 
     res.json({
-      classifications: Array.from(classificationsSet).sort(),
+      sunlight: Array.from(sunlightSet).sort(),
       difficulty: Array.from(difficultySet).sort(),
       growth: Array.from(growthSet).sort(),
     });
   });
 });
 
+app.get("/plants", (req, res) => {
+  const { growth, sunlight, difficultyMin, difficultyMax } = req.query;
+
+  let query = `
+    SELECT p.*, i.imageUrl
+    FROM plants p
+    LEFT JOIN plant_images i ON p.plantName = i.plantName
+    WHERE 1=1
+  `;
+  const params = [];
+  const minDifficulty = difficultyMin ? Number(difficultyMin) : 1;
+  const maxDifficulty = difficultyMax ? Number(difficultyMax) : 10;
+
+query += " AND p.difficultyOfCare BETWEEN ? AND ?";
+params.push(minDifficulty, maxDifficulty);
+
+  if (growth) {
+    const growthArr = Array.isArray(growth) ? growth : [growth];
+    query += ` AND p.growth IN (${growthArr.map(() => "?").join(",")})`;
+    params.push(...growthArr);
+  }
+
+  if (sunlight) {
+    const sunlightArr = Array.isArray(sunlight) ? sunlight : [sunlight];
+    query += ` AND p.sunlight IN (${sunlightArr.map(() => "?").join(",")})`;
+    params.push(...sunlightArr);
+  }
+
+  if (difficultyMin) {
+    query += " AND p.difficultyOfCare >= ?";
+    params.push(Number(difficultyMin));
+  }
+  if (difficultyMax) {
+    query += " AND p.difficultyOfCare <= ?";
+    params.push(Number(difficultyMax));
+  }
+
+  db.all(query, params, (err, rows) => {
+    if (err) return res.status(500).json(err);
+
+    // Aggregate images per plant
+    const plantsMap = {};
+    rows.forEach(row => {
+      if (!plantsMap[row.plantName]) {
+        plantsMap[row.plantName] = {
+          ...row,
+          classification: JSON.parse(row.classification || "[]"),
+          images: [],
+        };
+      }
+      if (row.imageUrl) plantsMap[row.plantName].images.push(row.imageUrl);
+    });
+
+    res.json(Object.values(plantsMap));
+  });
+});
 
 // Start server
 app.listen(4000, () => {
