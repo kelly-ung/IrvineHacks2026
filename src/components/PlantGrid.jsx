@@ -40,8 +40,7 @@ function PlantGrid({ plants }) {
         <div className="flex justify-center mt-8">
           <button
             onClick={handleSeeMore}
-            className="bg-green-800 hover:bg-green-950 text-white px-4 py-2 rounded-full transition"
-          >
+            className="bg-green-800 hover:bg-green-950 text-white px-4 py-2 rounded-full transition cursor-pointer"          >
             See More
           </button>
         </div>
