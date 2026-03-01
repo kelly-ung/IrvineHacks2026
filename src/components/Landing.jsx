@@ -1,6 +1,7 @@
 import PlantImage from "../assets/green_plant.jpg";
+import Button from "./Button"
 
-function Landing() {
+function Landing({ onTryNow }) {
     return (
         <div className="flex justify-center pt-12">
             <div className="flex flex-col md:flex-row items-center gap-8 p-4 max-w-5xl">
@@ -18,10 +19,12 @@ function Landing() {
                         Your Guide to Finding the Perfect Plant.
                     </h1>
 
-                    <p className="text-lg sm:text-xl md:text-2xl mt-4">
+                    <p className="text-lg sm:text-xl md:text-2xl my-4">
                         Access data for 350+ species.<br />  
                         Filter by growth, sunlight, and difficulty of care.
                     </p>
+
+                    <Button className="text-2xl" onClick={onTryNow}>Start Exploring</Button>
                 </div>
             </div>
         </div>

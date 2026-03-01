@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-function FilterForm({ onChange }) {
+function FilterForm({ onChange, resetFilters }) {
   const [filters, setFilters] = useState({
     growth: [],
     sunlight: [],
@@ -12,6 +12,16 @@ function FilterForm({ onChange }) {
     sunlight: [],
     difficulty: [],
   });
+
+  useEffect(() => {
+    if (resetFilters) {
+      setFilters({
+        growth: [],
+        sunlight: [],
+        difficultyOfCare: { min: 1, max: 10 },
+      });
+    }
+  }, [resetFilters]);
 
   useEffect(() => {
     fetch("http://localhost:4000/filters")
