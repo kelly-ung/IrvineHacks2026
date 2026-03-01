@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function FilterForm({ onChange }) {
   const [filters, setFilters] = useState({
@@ -7,12 +7,14 @@ function FilterForm({ onChange }) {
     difficultyOfCare: { min: 1, max: 10 },
   });
 
-  const growthOptions = ["slow", "moderate", "fast"];
-  const sunlightOptions = [
-    "indirect sunlight",
-    "full sunlight",
-    "partial sunlight",
-  ];
+  const [options, setOptions] = useState({ growth: [], sunlight: [], difficulty: [] });
+
+  useEffect(() => {
+    fetch("http://localhost:4000/filters")
+      .then((res) => res.json())
+      .then((data) => setOptions(data))
+      .catch(console.error);
+  }, []);
 
   const handleCheckboxChange = (category, value) => {
     setFilters((prev) => {
@@ -48,47 +50,41 @@ function FilterForm({ onChange }) {
     <div className="bg-white p-6 rounded-2xl shadow-md space-y-6 w-full max-w-md">
       <h2 className="text-xl font-semibold text-gray-800">Filter Plants</h2>
 
-      {/* Growth */}
-      <div>
-        <h3 className="font-medium text-gray-700 mb-2">Growth</h3>
-        <div className="space-y-2">
-          {growthOptions.map((option) => (
-            <label key={option} className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                className="accent-green-600"
-                checked={filters.growth.includes(option)}
-                onChange={() =>
-                  handleCheckboxChange("growth", option)
-                }
-              />
-              <span className="text-gray-600 capitalize">{option}</span>
-            </label>
-          ))}
-        </div>
-      </div>
+{/* Growth */}
+<div>
+  <h3 className="font-medium text-gray-700 mb-2">Growth</h3>
+  <div className="space-y-2">
+    {options.growth.map((option) => (
+      <label key={option} className="flex items-center space-x-2">
+        <input
+          type="checkbox"
+          className="accent-green-600"
+          checked={filters.growth.includes(option)}
+          onChange={() => handleCheckboxChange("growth", option)}
+        />
+        <span className="text-gray-600 capitalize">{option}</span>
+      </label>
+    ))}
+  </div>
+</div>
 
-      {/* Sunlight */}
-      <div>
-        <h3 className="font-medium text-gray-700 mb-2">Sunlight</h3>
-        <div className="space-y-2">
-          {sunlightOptions.map((option) => (
-            <label key={option} className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                className="accent-yellow-500"
-                checked={filters.sunlight.includes(option)}
-                onChange={() =>
-                  handleCheckboxChange("sunlight", option)
-                }
-              />
-              <span className="text-gray-600 capitalize">
-                {option}
-              </span>
-            </label>
-          ))}
-        </div>
-      </div>
+  {/* Sunlight */}
+  <div>
+    <h3 className="font-medium text-gray-700 mb-2">Sunlight</h3>
+    <div className="space-y-2">
+      {options.sunlight.map((option) => (
+        <label key={option} className="flex items-center space-x-2">
+          <input
+            type="checkbox"
+            className="accent-yellow-500"
+            checked={filters.sunlight.includes(option)}
+            onChange={() => handleCheckboxChange("sunlight", option)}
+          />
+          <span className="text-gray-600 capitalize">{option}</span>
+        </label>
+      ))}
+    </div>
+  </div>
 
       {/* Difficulty Range */}
       <div>

@@ -12,8 +12,23 @@ function App() {
   const [selectedPlant, setSelectedPlant] = useState(null);
 
   const handleFiltersChange = (filters) => {
-    console.log("Updated filters:", filters);
-  };
+  const query = new URLSearchParams();
+
+  // Growth filters
+  filters.growth.forEach(g => query.append("growth", g));
+
+  // Sunlight filters
+  filters.sunlight.forEach(s => query.append("sunlight", s));
+
+  // Difficulty range
+  query.append("difficultyMin", filters.difficultyOfCare.min);
+  query.append("difficultyMax", filters.difficultyOfCare.max);
+
+  fetch(`http://localhost:4000/plants?${query.toString()}`)
+    .then(res => res.json())
+    .then(data => setPlants(data))
+    .catch(console.error);
+};
 
   const handleSearch = async (searchTerm) => {
     try {
