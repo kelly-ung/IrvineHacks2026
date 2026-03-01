@@ -3,12 +3,17 @@ import { useState } from 'react'
 import Landing from "./components/Landing";
 import SearchBar from "./components/SearchBar";
 import PlantGrid from './components/PlantGrid';
+import FilterForm from './components/FilterForm'
 
 function App() {
   // fetch plant data 
   const [plants, setPlants] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedPlant, setSelectedPlant] = useState(null);
+
+  const handleFiltersChange = (filters) => {
+    console.log("Updated filters:", filters);
+  };
 
   const handleSearch = async (searchTerm) => {
     try {
@@ -55,12 +60,23 @@ return (
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto p-8">
-        {loading ? (
-          <p className="text-center">Loading...</p>
-        ) : (
-          <PlantGrid plants={plants} onSelect={setSelectedPlant} />
-        )}
+      <div className="max-w-7xl mx-auto p-8 flex flex-col lg:flex-row gap-8">
+        {/* Sticky Filter */}
+        <div className="lg:w-1/4">
+          <div className="sticky top-8">
+            <FilterForm onChange={handleFiltersChange} />
+          </div>
+        </div>
+
+        {/* Plant Grid */}
+        <div className="lg:w-3/4">
+          {loading ? (
+            <p className="text-center">Loading...</p>
+          ) : (
+            <PlantGrid plants={plants} onSelect={setSelectedPlant} />
+          )}
+        </div>
+
       </div>
     </div>
   );
