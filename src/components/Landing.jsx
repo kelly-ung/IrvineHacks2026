@@ -21,7 +21,7 @@ function Landing() {
 
                     <p className="text-lg sm:text-xl md:text-2xl mt-4">
                     Access data for 300+ species.<br />  
-                    Filter by light, water, and difficulty.
+                    Filter by growth, sunlight, and difficulty of care.
                     </p>
                 </div>
             </div>

@@ -9,20 +9,25 @@ export default function SearchBar({ onSearch }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex">
-      <input
-        type="text"
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        placeholder="Search plants..."
-        className="border p-2 w-full rounded-l"
-      />
-      <button
-        type="submit"
-        className="bg-green-500 text-white px-4 rounded-r"
-      >
-        Search
-      </button>
+    <form onSubmit={handleSubmit} className="w-full max-w-md">
+      <div className="relative">
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          placeholder="Search plants..."
+          className="border p-2 pr-24 w-full rounded-full"
+        />
+
+        <button
+          type="submit"
+          className="absolute right-0 top-0 h-full bg-green-800 hover:bg-green-950 text-white px-4 rounded-full"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+          </svg>
+        </button>
+      </div>
     </form>
   );
 }
