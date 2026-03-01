@@ -11,14 +11,21 @@ function PlantCard({ plant, onButtonClick }) {
       <div className="mt-4">
         <h2 className="font-bold text-2xl mb-2">{plant.name}</h2>
 
-        {/* Features */}
-        {plant.features && plant.features.length > 0 && (
-          <ul className="list-disc list-inside text-gray-600 space-y-1">
-            {plant.features.map((feature, index) => (
-              <li key={index}>{feature}</li>
-            ))}
-          </ul>
-        )}
+        {/* Details */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+        <p><strong>Growth:</strong> {plant.growth}</p>
+        <p><strong>Soil:</strong> {plant.soil}</p>
+        <p><strong>Sunlight:</strong> {plant.sunlight}</p>
+        <p><strong>Watering:</strong> {plant.watering}</p>
+        <p><strong>Fertilization:</strong> {plant.fertilizationType}</p>
+        <p><strong>Difficulty:</strong> {plant.difficultyOfCare}</p>
+        <p className="md:col-span-2">
+          <strong>Classification:</strong> 
+          {Array.isArray(plant.classification)
+          ? plant.classification.join(", ")
+          : plant.classification}
+        </p>
+      </div>
       </div>
       
       {/* Button */}

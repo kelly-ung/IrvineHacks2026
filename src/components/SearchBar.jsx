@@ -1,13 +1,28 @@
-function SearchBar() {
+import { useState } from "react";
+
+export default function SearchBar({ onSearch }) {
+  const [value, setValue] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSearch(value);
+  };
+
   return (
-    <div className="p-4">
+    <form onSubmit={handleSubmit} className="flex">
       <input
         type="text"
-        placeholder="Search..."
-        className="border bg-gray-50 border-gray-300 rounded-3xl px-4 py-2 w-full"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder="Search plants..."
+        className="border p-2 w-full rounded-l"
       />
-    </div>
+      <button
+        type="submit"
+        className="bg-green-500 text-white px-4 rounded-r"
+      >
+        Search
+      </button>
+    </form>
   );
 }
-
-export default SearchBar;
