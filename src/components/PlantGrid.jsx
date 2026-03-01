@@ -26,7 +26,7 @@ function PlantGrid({ plants }) {
 
       {/* Grid */}
       <div className="grid gap-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-        {visiblePlants.map((plant, index) => (
+        {visiblePlants.map((plant) => (
           <PlantPreview
             key={plant.plantName} 
             plant={plant}

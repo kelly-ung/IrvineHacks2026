@@ -118,17 +118,20 @@ app.get("/plants", (req, res) => {
   const { growth, sunlight, difficultyMin, difficultyMax } = req.query;
 
   let query = `
-    SELECT p.*, i.imageUrl
-    FROM plants p
-    LEFT JOIN plant_images i ON p.plantName = i.plantName
-    WHERE 1=1
-  `;
+  SELECT p.*, i.imageUrl
+  FROM plants p
+  LEFT JOIN plant_images i ON p.plantName = i.plantName
+  WHERE 1=1
+  `;  
   const params = [];
-  const minDifficulty = difficultyMin ? Number(difficultyMin) : 1;
-  const maxDifficulty = difficultyMax ? Number(difficultyMax) : 10;
 
-query += " AND p.difficultyOfCare BETWEEN ? AND ?";
-params.push(minDifficulty, maxDifficulty);
+  // Only add difficulty filter if specified
+  if (difficultyMin || difficultyMax) {
+    const min = difficultyMin ? Number(difficultyMin) : 1;
+    const max = difficultyMax ? Number(difficultyMax) : 10;
+    query += " AND p.difficultyOfCare BETWEEN ? AND ?";
+    params.push(min, max);
+  }
 
   if (growth) {
     const growthArr = Array.isArray(growth) ? growth : [growth];
@@ -140,15 +143,6 @@ params.push(minDifficulty, maxDifficulty);
     const sunlightArr = Array.isArray(sunlight) ? sunlight : [sunlight];
     query += ` AND p.sunlight IN (${sunlightArr.map(() => "?").join(",")})`;
     params.push(...sunlightArr);
-  }
-
-  if (difficultyMin) {
-    query += " AND p.difficultyOfCare >= ?";
-    params.push(Number(difficultyMin));
-  }
-  if (difficultyMax) {
-    query += " AND p.difficultyOfCare <= ?";
-    params.push(Number(difficultyMax));
   }
 
   db.all(query, params, (err, rows) => {
