@@ -21,32 +21,38 @@ function ImageCarousel({ images }) {
       />
 
       {/* Left Arrow */}
-      <button
-        onClick={prevImage}
-        className="absolute top-1/2 left-2 -translate-y-1/2 bg-white/70 hover:bg-white p-2 rounded-full shadow"
-      >
-        &#8592;
-      </button>
+      {images.length > 1 && (
+        <button
+          onClick={prevImage}
+          className="absolute top-1/2 left-2 -translate-y-1/2 bg-white/70 hover:bg-white p-2 rounded-full shadow"
+        >
+          &#8592;
+        </button>
+      )}
 
       {/* Right Arrow */}
-      <button
-        onClick={nextImage}
-        className="absolute top-1/2 right-2 -translate-y-1/2 bg-white/70 hover:bg-white p-2 rounded-full shadow"
-      >
-        &#8594;
-      </button>
+      {images.length > 1 && (
+        <button
+          onClick={nextImage}
+          className="absolute top-1/2 right-2 -translate-y-1/2 bg-white/70 hover:bg-white p-2 rounded-full shadow"
+        >
+          &#8594;
+        </button>
+      )}
 
       {/* Indicator Dots */}
-      <div className="flex justify-center mt-2 space-x-2">
-        {images.map((_, index) => (
-          <span
-            key={index}
-            className={`h-2 w-2 rounded-full ${
-              index === currentIndex ? "bg-green-600" : "bg-gray-300"
-            }`}
-          ></span>
-        ))}
-      </div>
+      {images.length > 1 && (
+        <div className="flex justify-center mt-2 space-x-2">
+          {images.map((_, index) => (
+            <span
+              key={index}
+              className={`h-2 w-2 rounded-full ${
+                index === currentIndex ? "bg-green-600" : "bg-gray-300"
+              }`}
+            ></span>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

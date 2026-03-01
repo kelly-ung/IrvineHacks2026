@@ -9,7 +9,7 @@ function PlantCard({ plant, onButtonClick }) {
 
       {/* Plant Info */}
       <div className="mt-4">
-        <h2 className="font-bold text-2xl mb-2">{plant.name}</h2>
+        <h2 className="font-bold text-2xl mb-2">{plant.plantName}</h2>
 
         {/* Details */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">

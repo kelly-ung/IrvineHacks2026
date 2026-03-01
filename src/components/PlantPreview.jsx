@@ -2,6 +2,7 @@ import ImageCarousel from "./ImageCarousel";
 import Button from "./Button";
 
 function PlantPreview({ plant, onButtonClick }) {
+  console.log("PlantPreview received plant:", plant);
   return (
     <div className="max-w-sm rounded-xl overflow-hidden shadow-lg bg-white p-4">
         {/* Plant Images */}
