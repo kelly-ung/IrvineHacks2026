@@ -20,7 +20,7 @@ function PlantCard({ plant, onButtonClick }) {
         <p><strong>Fertilization:</strong> {plant.fertilizationType}</p>
         <p><strong>Difficulty:</strong> {plant.difficultyOfCare}</p>
         <p className="md:col-span-2">
-          <strong>Classification:</strong> 
+          <strong>Classification: </strong> 
           {Array.isArray(plant.classification)
           ? plant.classification.join(", ")
           : plant.classification}

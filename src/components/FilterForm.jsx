@@ -134,7 +134,7 @@ function FilterForm({ onChange }) {
           setFilters(resetFilters);
           onChange?.(resetFilters);
         }}
-        className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-xl transition"
+        className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-full transition"
       >
         Reset Filters
       </button>
