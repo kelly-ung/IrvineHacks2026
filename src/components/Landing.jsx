@@ -21,8 +21,7 @@ function Landing({ onTryNow }) {
               src={PlantImage}
               alt="Plant"
               className="relative w-full max-w-md rounded-3xl 
-                         shadow-2xl transition-transform duration-500 
-                         group-hover:scale-105"
+                         shadow-2xl"
             />
           </div>
 
@@ -38,18 +37,19 @@ function Landing({ onTryNow }) {
             </h1>
 
             <p className="text-lg sm:text-xl text-gray-600 mt-6">
-              Explore 350+ species. Filter by growth, sunlight, and care difficulty —
-              discover plants tailored to your space.
+              Explore 350+ species. Filter by growth, sunlight, and care difficulty.
             </p>
 
             <div className="mt-8">
               <Button 
                 onClick={onTryNow}
                 className="px-8 py-4 text-lg rounded-2xl 
-                           bg-green-600 text-white 
-                           hover:bg-green-700 
-                           hover:shadow-[0_0_25px_rgba(34,197,94,0.4)]
-                           transition-all duration-300"
+                          bg-green-600 text-white 
+                          hover:bg-green-700 
+                          hover:shadow-[0_0_25px_rgba(34,197,94,0.4)]
+                          transition-all duration-300
+                          cursor-pointer
+                          hover:-translate-y-1 transform"
               >
                 Start Exploring
               </Button>

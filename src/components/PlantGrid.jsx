@@ -25,7 +25,7 @@ function PlantGrid({ plants }) {
       <h1 className="text-3xl font-bold mb-6 text-left">Results</h1>
 
       {/* Grid */}
-      <div className="grid gap-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
         {visiblePlants.map((plant) => (
           <PlantPreview
             key={plant.plantName} 

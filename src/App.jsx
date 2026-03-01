@@ -4,6 +4,7 @@ import Landing from "./components/Landing";
 import SearchBar from "./components/SearchBar";
 import PlantGrid from './components/PlantGrid';
 import FilterForm from './components/FilterForm'
+import Logo from "./assets/sunflower.png";
 
 function App() {
   // fetch plant data 
@@ -106,7 +107,12 @@ function App() {
   
 return (
     <div className="min-h-screen">
-      <h1 className="font-bold text-2xl p-6 pl-12 text-center md:text-left">
+      <img 
+        src={Logo}
+        alt="xylem"
+        className="absolute top-4 left-4 w-12 h-12 object-cover z-10"
+      />
+      <h1 className="font-bold text-2xl p-6 pl-16.5 text-center md:text-left">
         Xylem
       </h1>
 
