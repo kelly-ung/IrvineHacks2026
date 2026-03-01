@@ -81,6 +81,7 @@ app.get("/search", (req, res) => {
           fertilizationType: row.fertilizationType,
           difficultyOfCare: row.difficultyOfCare,
           classification: JSON.parse(row.classification),
+          description: row.description || "",
           images: [],
         };
       }

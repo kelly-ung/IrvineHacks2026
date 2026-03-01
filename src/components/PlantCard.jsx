@@ -13,6 +13,7 @@ function PlantCard({ plant, onButtonClick }) {
 
         {/* Details */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+        <p><strong>Description:</strong> {plant.description}</p>
         <p><strong>Growth:</strong> {plant.growth}</p>
         <p><strong>Soil:</strong> {plant.soil}</p>
         <p><strong>Sunlight:</strong> {plant.sunlight}</p>

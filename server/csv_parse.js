@@ -34,42 +34,7 @@
 //   });
 
 
-// // bulk update table with urls from new csv file
-// const fs = require("fs");
-// const csv = require("csv-parser");
-// const sqlite3 = require("sqlite3").verbose();
-
-// // Connect to DB
-// const db = new sqlite3.Database("./plants.db", sqlite3.OPEN_READWRITE, (err) => {
-//   if (err) console.error("DB error:", err);
-//   else console.log("Connected to SQLite database");
-// });
-
-// const csvFilePath = "./csvfiles/plant_image_urls.csv"; // new file
-
-// fs.createReadStream(csvFilePath)
-//   .pipe(csv())
-//   .on("data", (row) => {
-//     const { plantName, url } = row;
-
-//     db.run(
-//       `UPDATE plants SET url = ? WHERE plantName = ?`,
-//       [url, plantName],
-//       function (err) {
-//         if (err) {
-//           console.error("Update error:", err);
-//         } else if (this.changes === 0) {
-//           console.log("No match found for:", plantName);
-//         }
-//       }
-//     );
-//   })
-//   .on("end", () => {
-//     console.log("URL update complete!");
-//     db.close();
-//   });
-
-// add to new table
+// bulk update table with descriptions from new csv file
 const fs = require("fs");
 const csv = require("csv-parser");
 const sqlite3 = require("sqlite3").verbose();
@@ -80,29 +45,71 @@ const db = new sqlite3.Database("./plants.db", sqlite3.OPEN_READWRITE, (err) => 
   else console.log("Connected to SQLite database");
 });
 
-// Path to CSV
-const csvFilePath = "./csvfiles/final_merged_output.csv";
+const csvFilePath = "./csvfiles/plantdescriptions.csv"; // new file
+
+// ... existing connection code ...
 
 fs.createReadStream(csvFilePath)
-  .pipe(csv()) // default: first row is header
+  .pipe(csv())
   .on("data", (row) => {
-    const plantName = (row.plantName || "").trim();
-    const urlsString = row.urls || ""; // guard against undefined
-    if (!plantName || !urlsString) return; // skip invalid rows
+    // Note: CSV headers are case-sensitive. 
+    // Using the headers from our generated CSV: "Plant Name" and "Description"
+    const name = row['plantName'];
+    const desc = row['description']; 
 
-    const urls = urlsString.split(",").map(u => u.trim()).filter(Boolean);
-
-    urls.forEach((url) => {
-      db.run(
-        `INSERT INTO plant_images (plantName, imageUrl) VALUES (?, ?)`,
-        [plantName, url],
-        (err) => {
-          if (err) console.error(`Insert error for ${plantName}:`, err.message);
+    db.run(
+      `UPDATE plants SET description = ? WHERE plantName = ?`,
+      [desc, name],
+      function (err) {
+        if (err) {
+          console.error(`Error updating ${name}:`, err.message);
+        } else if (this.changes === 0) {
+          console.log("No match found in DB for:", name);
         }
-      );
-    });
+      }
+    );
   })
   .on("end", () => {
-    console.log("All images inserted into plant_images!");
-    db.close();
+    console.log("Description update processing finished!");
+    // Note: db.close() inside 'end' can sometimes trigger before 
+    // the last async db.run finishes. For a one-time bulk update, 
+    // it's usually okay, but keep an eye on it!
   });
+
+// // add to new table
+// const fs = require("fs");
+// const csv = require("csv-parser");
+// const sqlite3 = require("sqlite3").verbose();
+
+// // Connect to DB
+// const db = new sqlite3.Database("./plants.db", sqlite3.OPEN_READWRITE, (err) => {
+//   if (err) console.error("DB error:", err);
+//   else console.log("Connected to SQLite database");
+// });
+
+// // Path to CSV
+// const csvFilePath = "./csvfiles/final_merged_output.csv";
+
+// fs.createReadStream(csvFilePath)
+//   .pipe(csv()) // default: first row is header
+//   .on("data", (row) => {
+//     const plantName = (row.plantName || "").trim();
+//     const urlsString = row.urls || ""; // guard against undefined
+//     if (!plantName || !urlsString) return; // skip invalid rows
+
+//     const urls = urlsString.split(",").map(u => u.trim()).filter(Boolean);
+
+//     urls.forEach((url) => {
+//       db.run(
+//         `INSERT INTO plant_images (plantName, imageUrl) VALUES (?, ?)`,
+//         [plantName, url],
+//         (err) => {
+//           if (err) console.error(`Insert error for ${plantName}:`, err.message);
+//         }
+//       );
+//     });
+//   })
+//   .on("end", () => {
+//     console.log("All images inserted into plant_images!");
+//     db.close();
+//   });

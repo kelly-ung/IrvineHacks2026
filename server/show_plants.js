@@ -13,19 +13,19 @@ const db = new sqlite3.Database("./plants.db");
 //   db.close();
 // });
 
-// // example search query
-// db.all(
-//   "SELECT * FROM plant_images WHERE plantName LIKE ?",
-//   ["%Jasmine%"],
-//   (err, rows) => {
-//     if (err) {
-//       console.error(err);
-//     } else {
-//       console.table(rows);
-//     }
-//     db.close();
-//   }
-// );
+// example search query
+db.all(
+  "SELECT * FROM plants WHERE plantName LIKE ?",
+  ["%Jasmine%"],
+  (err, rows) => {
+    if (err) {
+      console.error(err);
+    } else {
+      console.table(rows);
+    }
+    db.close();
+  }
+);
 
 // Delete rows matching the plant name
 // db.run(
@@ -42,15 +42,25 @@ const db = new sqlite3.Database("./plants.db");
 // );
 
 // update image url
-db.run(
-  "UPDATE plant_images SET imageUrl = ? WHERE plantName LIKE ?",
-  ["https://images.cookforyourlife.org/wp-content/uploads/2018/08/shutterstock_224264125-min.jpg", "%Cilantro%"],
-  function (err) {
-    if (err) {
-      console.error(err);
-    } else {
-      console.log(`Rows updated: ${this.changes}`);
-    }
-    db.close();
-  }
-);
+// db.run(
+//   "UPDATE plant_images SET imageUrl = ? WHERE plantName LIKE ?",
+//   ["https://images.cookforyourlife.org/wp-content/uploads/2018/08/shutterstock_224264125-min.jpg", "%Cilantro%"],
+//   function (err) {
+//     if (err) {
+//       console.error(err);
+//     } else {
+//       console.log(`Rows updated: ${this.changes}`);
+//     }
+//     db.close();
+//   }
+// );
+
+// db.run("ALTER TABLE plants ADD COLUMN description TEXT;", (err) => {
+//   if (err) {
+//       console.error(err);
+//     } else {
+//       console.log(`table updated: ${this.changes}`);
+//     }
+//     db.close();
+//   }
+// );

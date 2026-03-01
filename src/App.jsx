@@ -81,6 +81,7 @@ function App() {
         fertilizationType: plant.fertilizationType,
         difficultyOfCare: plant.difficultyOfCare,
         classification: plant.classification,
+        description: plant.description || "",
         images: plant.images
       }));
 
