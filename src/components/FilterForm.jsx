@@ -79,11 +79,11 @@ function FilterForm({ onChange, resetFilters }) {
             <label key={option} className="flex items-center space-x-2">
               <input
                 type="checkbox"
-                className="accent-green-600"
+                className="accent-green-600 cursor-pointer"
                 checked={filters.growth.includes(option)}
                 onChange={() => handleCheckboxChange("growth", option)}
               />
-              <span className="text-gray-600 capitalize">{option}</span>
+              <span className="text-gray-600 capitalize cursor-pointer">{option}</span>
             </label>
           ))}
         </div>
@@ -92,16 +92,16 @@ function FilterForm({ onChange, resetFilters }) {
       {/* Sunlight */}
       <div>
         <h3 className="font-medium text-gray-700 mb-2">Sunlight</h3>
-        <div className="space-y-2">
+        <div className="space-y-2 ">
           {options.sunlight.map((option) => (
             <label key={option} className="flex items-center space-x-2">
               <input
                 type="checkbox"
-                className="accent-yellow-500"
+                className="accent-yellow-500 cursor-pointer"
                 checked={filters.sunlight.includes(option)}
                 onChange={() => handleCheckboxChange("sunlight", option)}
               />
-              <span className="text-gray-600 capitalize">{option}</span>
+              <span className="text-gray-600 capitalize cursor-pointer">{option}</span>
             </label>
           ))}
         </div>
@@ -130,7 +130,8 @@ function FilterForm({ onChange, resetFilters }) {
               [&::-webkit-slider-thumb]:w-4
               [&::-webkit-slider-thumb]:rounded-full
               [&::-webkit-slider-thumb]:bg-green-600
-              [&::-webkit-slider-thumb]:translate-y-1.5"
+              [&::-webkit-slider-thumb]:translate-y-1.5
+              cursor-pointer"
           />
 
           {/* Max slider */}
@@ -147,7 +148,8 @@ function FilterForm({ onChange, resetFilters }) {
               [&::-webkit-slider-thumb]:h-4
               [&::-webkit-slider-thumb]:w-4
               [&::-webkit-slider-thumb]:rounded-full
-              [&::-webkit-slider-thumb]:bg-green-600"
+              [&::-webkit-slider-thumb]:bg-green-600
+              cursor-pointer"
           />
         </div>
 
@@ -168,7 +170,7 @@ function FilterForm({ onChange, resetFilters }) {
           setFilters(resetFilters);
           onChange?.(resetFilters);
         }}
-        className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-full transition"
+        className="w-full bg-gray-200 hover:bg-gray-400 text-gray-700 py-2 rounded-full transition cursor-pointer"
       >
         Reset Filters
       </button>

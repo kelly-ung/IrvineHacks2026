@@ -24,7 +24,7 @@ function ImageCarousel({ images }) {
       {images.length > 1 && (
         <button
           onClick={prevImage}
-          className="absolute top-1/2 left-2 -translate-y-1/2 bg-white/70 hover:bg-white p-2 rounded-full shadow"
+          className="absolute top-1/2 left-2 -translate-y-1/2 bg-white/70 hover:bg-white p-2 rounded-full shadow cursor-pointer"
         >
           &#8592;
         </button>
@@ -34,7 +34,7 @@ function ImageCarousel({ images }) {
       {images.length > 1 && (
         <button
           onClick={nextImage}
-          className="absolute top-1/2 right-2 -translate-y-1/2 bg-white/70 hover:bg-white p-2 rounded-full shadow"
+          className="absolute top-1/2 right-2 -translate-y-1/2 bg-white/70 hover:bg-white p-2 rounded-full shadow cursor-pointer"
         >
           &#8594;
         </button>

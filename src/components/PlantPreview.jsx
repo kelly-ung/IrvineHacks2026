@@ -15,7 +15,7 @@ function PlantPreview({ plant, onButtonClick }) {
 
         {/* Button */}
         <div className="mt-4 flex justify-end">
-            <Button onClick={() => onButtonClick(plant)}>View</Button>
+            <Button className="cursor-pointer" onClick={() => onButtonClick(plant)}>View</Button>
         </div>
     </div>
   );

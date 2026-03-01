@@ -9,12 +9,11 @@ function PlantCard({ plant, onButtonClick }) {
 
       {/* Plant Info */}
       <div className="mt-4">
-        <h2 className="font-bold text-3xl my-8">{plant.plantName}</h2>
-
-        <h3 className="text-xl my-8">{plant.description}</h3>
+        <h2 className="font-bold text-2xl mb-2">{plant.plantName}</h2>
 
         {/* Details */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+        <p><strong>Description:</strong> {plant.description}</p>
         <p><strong>Growth:</strong> {plant.growth}</p>
         <p><strong>Soil:</strong> {plant.soil}</p>
         <p><strong>Sunlight:</strong> {plant.sunlight}</p>
@@ -32,7 +31,7 @@ function PlantCard({ plant, onButtonClick }) {
       
       {/* Button */}
       <div className="mt-4 flex justify-end">
-        <Button onClick={() => onButtonClick()}>Close</Button>
+        <Button className="cursor-pointer" onClick={() => onButtonClick()}>Close</Button>
       </div>
     </div>
   );
