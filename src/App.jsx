@@ -20,7 +20,7 @@ function App() {
         const data = await res.json();
 
         const formatted = data.map((plant) => ({
-          name: plant.plantName,
+          plantName: plant.plantName,
           growth: plant.growth,
           soil: plant.soil,
           sunlight: plant.sunlight,
@@ -73,7 +73,7 @@ function App() {
 
       // Transform backend data
       const formatted = data.map((plant) => ({
-        name: plant.plantName,
+        plantName: plant.plantName,
         growth: plant.growth,
         soil: plant.soil,
         sunlight: plant.sunlight,
