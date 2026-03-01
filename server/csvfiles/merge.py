@@ -1,8 +1,8 @@
 import csv
 
-original_file = "wikimedia_images.csv"
-new_urls_file = "plants_names.csv"
-output_file = "merged_output.csv"
+original_file = "merged_output.csv"
+new_urls_file = "updated_links.csv"
+output_file = "final_merged_output.csv"
 
 plants = {}
 
@@ -23,19 +23,17 @@ with open(original_file, newline='', encoding='utf-8') as f:
     reader = csv.DictReader(f)
     for row in reader:
         plant = row["plantName"].strip()
-        plants[plant] = set(parse_urls(row.get("urls", "")))
+        plants[plant] = parse_urls(row.get("urls", ""))  # store as list
 
-# Read new
+# Read new (OVERWRITE if exists)
 with open(new_urls_file, newline='', encoding='utf-8') as f:
     reader = csv.DictReader(f)
     for row in reader:
         plant = row["plantName"].strip()
         new_urls = parse_urls(row.get("urls", ""))
 
-        if plant not in plants:
-            plants[plant] = set()
-
-        plants[plant].update(new_urls)
+        # Overwrite instead of update
+        plants[plant] = new_urls
 
 # Write output
 with open(output_file, "w", newline='', encoding='utf-8') as f:

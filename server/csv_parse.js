@@ -81,7 +81,7 @@ const db = new sqlite3.Database("./plants.db", sqlite3.OPEN_READWRITE, (err) => 
 });
 
 // Path to CSV
-const csvFilePath = "./csvfiles/merged_output.csv";
+const csvFilePath = "./csvfiles/final_merged_output.csv";
 
 fs.createReadStream(csvFilePath)
   .pipe(csv()) // default: first row is header
